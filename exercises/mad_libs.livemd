@@ -56,7 +56,7 @@ blank3 = "code"
 Enter your solution below.
 
 ```elixir
-
+"A programmer is a " <> "human" <> " that turns " <> "coffee" <> " into " <> "code" <> "."
 ```
 
 ## String Interpolation Madlib
@@ -81,7 +81,11 @@ blank3 = "foobar"
 Enter your solution below.
 
 ```elixir
+one = "one"
+two = "two"
+three = "three"
 
+"#{one} and #{two} combined makes #{three}."
 ```
 
 ## Commit Your Progress
