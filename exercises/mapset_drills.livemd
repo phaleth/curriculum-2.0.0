@@ -41,7 +41,7 @@ This set of drills is for [MapSets](../reading/maps_mapsets_keyword_lists.livemd
 Use [MapSet.new/2](https://hexdocs.pm/elixir/MapSet.html#new/2) to create a mapset with the integers `1`, `2`, and `3`.
 
 ```elixir
-
+MapSet.new([1, 2, 3])
 ```
 
 Use [MapSet.new/2](https://hexdocs.pm/elixir/MapSet.html#new/2) to create an empty mapset.
