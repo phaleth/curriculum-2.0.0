@@ -133,7 +133,13 @@ end
 Enter your solution below.
 
 ```elixir
+temperature = Enum.random(0..20)
 
+if temperature > 10 do
+  :hot
+else
+  :cold
+end
 ```
 
 ## Clear Control Flow
@@ -278,7 +284,7 @@ We can provide any number of cases. Cases use pattern matching to decide which r
 Return each value from `1` to `5` by changing the `condition` variable below.
 
 ```elixir
-condition = nil
+condition = [1, 2, 3]
 
 case condition do
   :red -> 1
@@ -378,7 +384,7 @@ end
 Return each result from `1` to `5` by changing the `condition` variable below.
 
 ```elixir
-condition = nil
+condition = {1, "stuff", %{key: [1, "stuff", "stuff"]}}
 
 case condition do
   [1, 2, 3] -> 1
@@ -517,7 +523,15 @@ end
 </details>
 
 ```elixir
+grade = Enum.random(1..100)
 
+cond do
+  grade in 85..100 -> "A"
+  grade in 70..84 -> "B"
+  grade in 55..69 -> "C"
+  grade in 1..54 -> "D"
+  true -> "N/A"
+end
 ```
 
 ## Unless
@@ -571,7 +585,13 @@ In the Elixir cell below
 * Create an `unless` statement. which returns `"awake"` unless `tired`.
 
 ```elixir
+tired = true
 
+unless tired do
+  "awake"
+else
+  "time to crash"
+end
 ```
 
 ## Commit Your Progress
