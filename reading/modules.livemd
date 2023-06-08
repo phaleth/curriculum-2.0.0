@@ -120,7 +120,7 @@ end
 Call the `MutliParamExample.call/3` function with different arguments.
 
 ```elixir
-
+MultiParamExample.call("one", "two", "three")
 ```
 
 ## Internal Module Functions
@@ -318,7 +318,13 @@ end
 Enter your solution below.
 
 ```elixir
+defmodule Languages.Spanish do
+  def greeting do
+    "Hola"
+  end
+end
 
+Languages.Spanish.greeting()
 ```
 
 ### Nested Modules
@@ -357,8 +363,8 @@ We use the `@` symbol to define a compile-time module attribute.
 
 ```elixir
 defmodule Hero do
-  @name "Spider-Man"
-  @nemesis "Green Goblin"
+  @name "Batman"
+  @nemesis "Joker"
 
   def introduce do
     "Hello, my name is #{@name}!"
@@ -516,7 +522,22 @@ end
 </details>
 
 ```elixir
+defmodule Math do
+  def add(a, b) do
+    a + b
+  end
 
+  def add(a, b, c) do
+    a + b + c
+  end
+end
+
+# 7
+res1 = Math.add(2, 5)
+# 6
+res2 = Math.add(1, 2, 3)
+
+{res1, res2}
 ```
 
 ## Default Arguments
@@ -583,7 +604,14 @@ Greeting.hello("Andrew")
 ```
 
 ```elixir
+defmodule Greeting do
+  def hello(name \\ "Jon") do
+    "Hello #{name}!"
+  end
+end
 
+res1 = Greeting.hello()
+res2 = Greeting.hello("Andrew")
 ```
 
 ## Documentation
@@ -696,25 +724,24 @@ If this is the case, you either have to fix your code, or remove/comment the cra
 Uncomment the following code and evaluate the cell to see an example. Re-comment your code to avoid crashing the livebook as you continue with the lesson.
 
 ```elixir
-# defmodule DoctestCrash Do
-# @moduledoc """
-# DoctestCrash
+defmodule DoctestCrash do
+  @moduledoc """
+  DoctestCrash
 
-# Explains Doctest Crashes With Examples
-# """
+  Explains Doctest Crashes With Examples
+  """
 
-# @doc """
-# Purposely Crashes Doctest Using Invalid Pattern Matching
+  @doc """
+  Purposely Crashes Doctest Using Invalid Pattern Matching
 
-# ## Examples
+  ##Examples
 
-# iex> {} = DoctestCrash.crash()
-# "2"
-# """
-# def crash do
-
-# end
-# end
+  iex> {} = DoctestCrash.crash()
+  "2"
+  """
+  def crash do
+  end
+end
 ```
 
 ### Your Turn
