@@ -55,9 +55,13 @@ defmodule Fibonacci do
 
   ## Examples
 
-    iex> 
+    iex> Fibonacci.sequence(5)
+    5
   """
+  def sequence(length) when length < 2, do: length
+
   def sequence(length) do
+    sequence(length - 1) + sequence(length - 2)
   end
 end
 ```
@@ -68,7 +72,25 @@ In the Elixir cell below, create a `FastFib` module. The `FastFib` module should
 
 ```elixir
 defmodule FastFib do
+  # TODO: fix this once you figure out how to handle state
+  @results %{}
+  def sequence(length) when length < 2, do: length
+
   def sequence(length) do
+    key1 = length - 1
+    key2 = length - 2
+
+    res1 =
+      if Map.has_key?(@results, key1),
+        do: Map.get(@results, key1),
+        else: Map.put_new(@results, key1, sequence(length - 1))
+
+    res2 =
+      if Map.has_key?(@results, key2),
+        do: Map.get(@results, key2),
+        else: Map.put_new(@results, key2, sequence(length - 2))
+
+    res1 + res2
   end
 end
 ```
