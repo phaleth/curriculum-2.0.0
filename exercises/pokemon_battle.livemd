@@ -128,7 +128,21 @@ defmodule Pokemon do
   defstruct [:name, :health, :attack, :speed, type: [:grass, :fire, :water]]
 
   def attack(attacker, defender) do
-    %Pokemon{name: "Bulbasaur", type: :grass, health: 10.0, attack: 5, speed: 20}
+    damage = dmg_modifier(attacker.type, defender.type) * attacker.attack
+    %Pokemon{defender | health: defender.health - damage}
+  end
+
+  defp dmg_modifier(attacker_type, defender_type) do
+    cond do
+      {attacker_type, defender_type} in [{:fire, :grass}, {:grass, :water}, {:water, :fire}] ->
+        2.0
+
+      {attacker_type, defender_type} in [{:fire, :water}, {:grass, :fire}, {:water, :grass}] ->
+        0.5
+
+      true ->
+        1.0
+    end
   end
 end
 ```
@@ -192,6 +206,9 @@ Enter your solution below.
 charmander = %Pokemon{name: "Charmander", type: :fire, health: 20.0, attack: 5, speed: 20}
 bulbasaur = %Pokemon{name: "Bulbasaur", type: :grass, health: 20.0, attack: 5, speed: 20}
 squirtle = %Pokemon{name: "Squirtle", type: :water, health: 20.0, attack: 5, speed: 20}
+
+squirtle = Pokemon.attack(charmander, squirtle)
+{squirtle, Pokemon.attack(bulbasaur, squirtle)}
 ```
 
 ## Commit Your Progress
