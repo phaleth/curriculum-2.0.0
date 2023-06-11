@@ -384,7 +384,7 @@ Enum.map(1..10, fn integer -> "#{integer}" end)
 Enter your solution below.
 
 ```elixir
-
+1..10 |> Enum.map(&Integer.to_string(&1))
 ```
 
 ## Enum.reduce/2 And Enum.reduce/3
@@ -506,7 +506,7 @@ end)
 Enter your solution below.
 
 ```elixir
-
+1..10 |> Enum.reduce(0, &if(rem(&1, 2) === 0, do: &1 + &2, else: &2))
 ```
 
 ## Enum.filter
@@ -544,7 +544,7 @@ odd_numbers = Enum.filter(1..10, fn integer -> rem(integer, 2) != 0 end)
 Enter your solution below.
 
 ```elixir
-
+{1..10 |> Enum.filter(&(rem(&1, 2) === 1)), 1..10 |> Enum.filter(&(rem(&1, 2) === 0))}
 ```
 
 ## Enum.all?/2
@@ -594,7 +594,9 @@ Enum.all?(1..10_000_000, fn integer -> is_integer(integer) end)
 Use [Enum.all/2](https://hexdocs.pm/elixir/Enum.html#all/2) to determine if all of the `colors` in this list of colors are `:green`. You may change the value of `colors` to experiment with [Enum.all/2](https://hexdocs.pm/elixir/Enum.html#all/2).
 
 ```elixir
-colors = [:green, :green, :red]
+colors =
+  [:green, :green, :red]
+  |> Enum.all?(&(&1 === :green))
 ```
 
 ## Enum.any?/2
@@ -634,7 +636,9 @@ Enum.any?(1..10_000_000, fn integer -> is_bitstring(integer) end)
 Use [Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any?/2) to determine if any of the animals in the `animals` list are `:dogs`. You may change the `animals` list to experiment with [Enum.any?/2](https://hexdocs.pm/elixir/Enum.html#any?/2).
 
 ```elixir
-animals = [:cats, :dogs, :bears, :lions, :penguins]
+animals =
+  [:cats, :dogs, :bears, :lions, :penguins]
+  |> Enum.any?(&(&1 === :dogs))
 ```
 
 ## Enum.count/1
@@ -661,7 +665,9 @@ Enum.count([{}, "hello", %{}, [[[]]]])
 In the Elixir cell below, count the number of elements in the `collection`. It should return `5`.
 
 ```elixir
-collection = [1, 2, 3, 4, 5]
+collection =
+  [1, 2, 3, 4, 5]
+  |> Enum.count()
 ```
 
 ## Enum.find/3
@@ -690,6 +696,7 @@ Use [Enum.find/2](https://hexdocs.pm/elixir/Enum.html#find/2) to find the first 
 
 ```elixir
 [1, "2", "three", 4, "five", 6]
+|> Enum.find(&(is_integer(&1) and rem(&1, 2) === 0))
 ```
 
 ## Enum.random/1
@@ -716,7 +723,7 @@ Enum.map(1..10, fn _ -> Enum.random(0..9) end)
 Enter your solution below.
 
 ```elixir
-
+1..10 |> Enum.map(fn _ -> Enum.random(0..9) end)
 ```
 
 ## Capture Operator And Module Functions
