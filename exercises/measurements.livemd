@@ -82,6 +82,12 @@ defmodule Measurements do
     [10, -10, 30]
   """
   def increments(measurements) do
+    measurements
+    |> Enum.chunk_every(2, 1, :discard)
+    |> Enum.map(fn pair ->
+      [a, b] = pair
+      b - a
+    end)
   end
 
   @doc """
@@ -100,6 +106,9 @@ defmodule Measurements do
     1
   """
   def increased(measurements) do
+    measurements
+    |> increments()
+    |> Enum.count(&(&1 > 0))
   end
 
   @doc """
@@ -115,6 +124,9 @@ defmodule Measurements do
     40
   """
   def increased_by(measurements) do
+    measurements
+    |> increments()
+    |> Enum.reduce(&if &1 > 0, do: &1 + &2, else: &2)
   end
 
   @doc """
@@ -130,6 +142,7 @@ defmodule Measurements do
     6.0
   """
   def average(measurements) do
+    div(Enum.sum(measurements), Enum.count(measurements)) * 1.0
   end
 end
 ```
