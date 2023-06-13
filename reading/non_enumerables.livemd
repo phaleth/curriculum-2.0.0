@@ -69,7 +69,7 @@ Integer.digits(123)
 In the Elixir cell below, convert the integer `4389` into a list of digits.
 
 ```elixir
-
+4389 |> Integer.digits()
 ```
 
 ### Undigits
@@ -150,7 +150,7 @@ Now your string is an enumerable list of characters.
 In the Elixir cell below, convert the string `"Hello, world!"` into a list of single characters.
 
 ```elixir
-
+"Hello, world!" |> String.split("", trim: true)
 ```
 
 ### Joining Strings
@@ -228,6 +228,7 @@ defmodule CharacterCount do
       4
   """
   def count(string) do
+    String.split(string, "", trim: true) |> Enum.count()
   end
 end
 ```
