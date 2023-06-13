@@ -161,7 +161,14 @@ defmodule TicTacToe do
       iex> TicTacToe.at(board, {0, 2})
       "A"
   """
-  def at(board, coordinate) do
+  def at(board, {x, y} = coordinate) do
+    finder(board, {x, y})
+    |> Enum.at(x)
+  end
+
+  defp finder(board, {x, y}) do
+    Enum.reverse(board)
+    |> Enum.at(y)
   end
 
   @doc """
@@ -179,7 +186,72 @@ defmodule TicTacToe do
       iex> TicTacToe.fill(board, {1, 1}, "O")
       [[nil, nil, nil], [nil, "O", nil], [nil, nil, nil]]
   """
-  def fill(board, coordinate, symbol) do
+  def fill(board, {x, y} = coordinate, symbol) do
+    sublist =
+      finder(board, {x, y})
+      |> List.update_at(x, fn _ -> symbol end)
+
+    List.update_at(board, Enum.count(board) - 1 - y, fn _ -> sublist end)
+  end
+
+  @doc """
+  Determine if a player has won the game.
+
+  ## Examples
+
+    Row Wins:
+
+    iex> TicTacToe.winner([["X", "X", "X"], [nil, nil, nil], [nil, nil, nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, nil], ["X", "X", "X"], [nil, nil, nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, nil], [nil, nil, nil], ["X", "X", "X"]])
+    "X"
+
+    Column Wins:
+
+    iex> TicTacToe.winner([["X", nil, nil], ["X", nil, nil], ["X", nil, nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, "X", nil], [nil, "X", nil], [nil, "X", nil]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, "X"], [nil, nil, "X"], [nil, nil, "X"]])
+    "X"
+
+    Diagonal Wins
+
+    iex> TicTacToe.winner([["X", nil, nil], [nil, "X", nil], [nil, nil, "X"]])
+    "X"
+    iex> TicTacToe.winner([[nil, nil, "X"], [nil, "X", nil], ["X", nil, nil]])
+    "X"
+
+    No Winner
+
+    iex> TicTacToe.winner([[nil, nil, nil], [nil, nil, nil], [nil, nil, nil]])
+    nil
+    iex> TicTacToe.winner([[nil, "X", nil], [nil, "X", nil], [nil, nil, nil]])
+    nil
+
+  """
+  def winner(board) do
+    {:ok, winner} = row_wins(board)
+    winner
+  end
+
+  defp row_wins(board) do
+    winning_row =
+      Enum.find(board, fn row ->
+        cond do
+          row === ["X", "X", "X"] -> true
+          row === ["O", "O", "O"] -> true
+          true -> false
+        end
+      end)
+
+    case winning_row do
+      ["X", "X", "X"] -> {:ok, "X"}
+      ["O", "O", "O"] -> {:ok, "O"}
+      _ -> {:error, "bad luck"}
+    end
   end
 end
 ```
