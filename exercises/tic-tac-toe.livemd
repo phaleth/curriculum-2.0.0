@@ -161,12 +161,12 @@ defmodule TicTacToe do
       iex> TicTacToe.at(board, {0, 2})
       "A"
   """
-  def at(board, {x, y} = coordinate) do
+  def at(board, {x, y} = _coordinate) do
     finder(board, {x, y})
     |> Enum.at(x)
   end
 
-  defp finder(board, {x, y}) do
+  defp finder(board, {_x, y}) do
     Enum.reverse(board)
     |> Enum.at(y)
   end
@@ -186,7 +186,7 @@ defmodule TicTacToe do
       iex> TicTacToe.fill(board, {1, 1}, "O")
       [[nil, nil, nil], [nil, "O", nil], [nil, nil, nil]]
   """
-  def fill(board, {x, y} = coordinate, symbol) do
+  def fill(board, {x, y} = _coordinate, symbol) do
     sublist =
       finder(board, {x, y})
       |> List.update_at(x, fn _ -> symbol end)
@@ -233,11 +233,21 @@ defmodule TicTacToe do
 
   """
   def winner(board) do
-    {:ok, winner} = row_wins(board)
-    winner
+    case row_winner(board) do
+      {:ok, winner} -> winner
+      {:error, _} -> nil
+    end ||
+      case col_winner(board) do
+        {:ok, winner} -> winner
+        {:error, _} -> nil
+      end ||
+      case diag_winner(board) do
+        {:ok, winner} -> winner
+        {:error, _} -> nil
+      end
   end
 
-  defp row_wins(board) do
+  defp row_winner(board) do
     winning_row =
       Enum.find(board, fn row ->
         cond do
@@ -248,6 +258,47 @@ defmodule TicTacToe do
       end)
 
     case winning_row do
+      ["X", "X", "X"] -> {:ok, "X"}
+      ["O", "O", "O"] -> {:ok, "O"}
+      _ -> {:error, "bad luck"}
+    end
+  end
+
+  defp col_winner(board) do
+    winning_col =
+      Enum.find_value(0..(Enum.count(board) - 1), fn i ->
+        col = Enum.map(board, fn row -> Enum.at(row, i) end)
+        if Enum.all?(col), do: col, else: false
+      end)
+
+    case winning_col do
+      ["X", "X", "X"] -> {:ok, "X"}
+      ["O", "O", "O"] -> {:ok, "O"}
+      _ -> {:error, "bad luck"}
+    end
+  end
+
+  defp get_diag(board, winning_diag, callback) do
+    if Enum.all?(winning_diag),
+      do: winning_diag,
+      else:
+        Enum.with_index(board)
+        |> Enum.reduce([], fn {row, i}, acc ->
+          {elem, _} =
+            Enum.with_index(row)
+            |> Enum.find(fn {_cell, j} -> callback.(i, j) end)
+
+          [elem | acc]
+        end)
+  end
+
+  defp diag_winner(board) do
+    winning_diag = get_diag(board, [nil, nil, nil], fn i, j -> i === j end)
+
+    winning_diag =
+      get_diag(board, winning_diag, fn i, j -> i === Enum.count(winning_diag) - 1 - j end)
+
+    case winning_diag do
       ["X", "X", "X"] -> {:ok, "X"}
       ["O", "O", "O"] -> {:ok, "O"}
       _ -> {:error, "bad luck"}
