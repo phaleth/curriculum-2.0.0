@@ -268,7 +268,7 @@ defmodule TicTacToe do
     winning_col =
       Enum.find_value(0..(Enum.count(board) - 1), fn i ->
         col = Enum.map(board, fn row -> Enum.at(row, i) end)
-        if Enum.all?(col), do: col, else: false
+        if all_same?(col), do: col, else: false
       end)
 
     case winning_col do
@@ -279,7 +279,7 @@ defmodule TicTacToe do
   end
 
   defp get_diag(board, winning_diag, callback) do
-    if Enum.all?(winning_diag),
+    if all_same?(winning_diag),
       do: winning_diag,
       else:
         Enum.with_index(board)
@@ -302,6 +302,14 @@ defmodule TicTacToe do
       ["X", "X", "X"] -> {:ok, "X"}
       ["O", "O", "O"] -> {:ok, "O"}
       _ -> {:error, "bad luck"}
+    end
+  end
+
+  def all_same?(list) do
+    case list do
+      ["X", "X", "X"] -> true
+      ["O", "O", "O"] -> true
+      _ -> false
     end
   end
 end
