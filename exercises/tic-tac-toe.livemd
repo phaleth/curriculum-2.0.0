@@ -138,6 +138,8 @@ end
 
 ```elixir
 defmodule TicTacToe do
+  @board_size 3
+
   @moduledoc """
     Documentation for `TicTacToe`
   """
@@ -278,7 +280,7 @@ defmodule TicTacToe do
     end
   end
 
-  defp get_diag(board, winning_diag, callback) do
+  defp get_diag(winning_diag, board, callback) do
     if all_same?(winning_diag),
       do: winning_diag,
       else:
@@ -293,10 +295,9 @@ defmodule TicTacToe do
   end
 
   defp diag_winner(board) do
-    winning_diag = get_diag(board, [nil, nil, nil], fn i, j -> i === j end)
-
     winning_diag =
-      get_diag(board, winning_diag, fn i, j -> i === Enum.count(winning_diag) - 1 - j end)
+      get_diag([nil, nil, nil], board, fn i, j -> i === j end)
+      |> get_diag(board, fn i, j -> i === @board_size - 1 - j end)
 
     case winning_diag do
       ["X", "X", "X"] -> {:ok, "X"}
