@@ -83,6 +83,9 @@ defmodule Anagram do
     true
   """
   def anagram?(word, possible_anagram) do
+    String.length(word) === String.length(possible_anagram) and
+      String.split(word, "", trim: true)
+      |> Enum.all?(&String.contains?(possible_anagram, &1))
   end
 
   @doc """
@@ -100,6 +103,7 @@ defmodule Anagram do
     []
   """
   def filter_anagrams(word_list, anagram) do
+    Enum.filter(word_list, &anagram?(&1, anagram))
   end
 end
 ```
@@ -129,6 +133,15 @@ defmodule AnagramSolver do
     ["abc", "acb", "bac", "bca", "cab", "cba"]
   """
   def solve(string) do
+    Enum.map(perms(String.split(string, "", trim: true)), &Enum.join(&1))
+  end
+
+  defp perms([]), do: [[]]
+
+  defp perms(l) do
+    for h <- l, t <- perms(l -- [h]) do
+      [h | t]
+    end
   end
 end
 ```
