@@ -203,7 +203,10 @@ end)
 </details>
 
 ```elixir
-
+Integer.digits(1_234_321)
+|> Enum.reduce(%{}, fn num, acc ->
+  Map.update(acc, num, 1, &(&1 + 1))
+end)
 ```
 
 ## Multiple Accumulators
