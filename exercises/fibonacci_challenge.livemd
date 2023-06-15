@@ -72,9 +72,7 @@ fib =
     {current, {next, current + next}}
   end)
 
-for n <- 1..10 do
-  fib |> Enum.at(n)
-end
+fib |> Enum.take(10)
 ```
 
 ## Competition: Benchmark
