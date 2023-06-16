@@ -94,6 +94,9 @@ defmodule CustomEnum do
     [7, 6, 5, 4]
   """
   def reverse(list) do
+    Enum.reduce(list, [], fn elem, acc ->
+      [elem | acc]
+    end)
   end
 
   @doc """
@@ -106,8 +109,33 @@ defmodule CustomEnum do
 
     iex> CustomEnum.map([5, 4, 3], fn integer -> is_integer(integer) end)
     [true, true, true]
+
+    iex> CustomEnum.map([5, 4, 3], fn integer -> integer end)
+    [5, 4, 3]
   """
   def map(list, callback_function) do
+    # list = [5, 4, 3]
+
+    # acc = []
+    # elem = 5, acc = [5]
+    # elem = 4, acc = [5, 4]
+    # elem = 3, acc = [5, 4, 3]
+
+    # acc = []
+    # elem = 5, acc = [5]
+    # elem = 4, acc = [4, 5]
+    # elem = 3, acc = [3, 4, 5]
+
+    # acc = [5]
+    # elem = 4
+    # result = callback_function.(elem)
+    # updated_acc = [result | acc]
+
+    Enum.reduce(list, [], fn elem, acc ->
+      result = callback_function.(elem)
+      [result | acc]
+    end)
+    |> reverse()
   end
 
   @doc """
@@ -123,6 +151,10 @@ defmodule CustomEnum do
     ["2", "3"]
   """
   def filter(list, callback_function) do
+    Enum.reduce(list, [], fn elem, acc ->
+      include = callback_function.(elem)
+      if include, do: acc ++ [elem], else: acc
+    end)
   end
 
   @doc """
@@ -137,6 +169,9 @@ defmodule CustomEnum do
     3
   """
   def sum(list_of_integers) do
+    Enum.reduce(list_of_integers, fn integer, acc ->
+      acc + integer
+    end)
   end
 
   @doc """
@@ -151,6 +186,9 @@ defmodule CustomEnum do
     "Hello, World!"
   """
   def join(list_of_strings) do
+    Enum.reduce(list_of_strings, "", fn elem, acc ->
+      acc <> elem
+    end)
   end
 end
 ```
