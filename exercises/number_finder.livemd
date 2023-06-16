@@ -80,6 +80,9 @@ defmodule NumberFinder do
     -3
   """
   def smallest(number_list) do
+    Enum.reduce(number_list, fn num, acc ->
+      min(acc, num)
+    end)
   end
 
   @doc """
@@ -95,6 +98,9 @@ defmodule NumberFinder do
     20
   """
   def largest(number_list) do
+    Enum.reduce(number_list, fn num, acc ->
+      max(acc, num)
+    end)
   end
 end
 ```
