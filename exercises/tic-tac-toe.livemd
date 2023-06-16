@@ -138,8 +138,6 @@ end
 
 ```elixir
 defmodule TicTacToe do
-  @board_size 3
-
   @moduledoc """
     Documentation for `TicTacToe`
   """
@@ -164,11 +162,11 @@ defmodule TicTacToe do
       "A"
   """
   def at(board, {x, y} = _coordinate) do
-    finder(board, {x, y})
+    row_finder(board, {x, y})
     |> Enum.at(x)
   end
 
-  defp finder(board, {_x, y}) do
+  defp row_finder(board, {_x, y}) do
     Enum.reverse(board)
     |> Enum.at(y)
   end
@@ -190,10 +188,14 @@ defmodule TicTacToe do
   """
   def fill(board, {x, y} = _coordinate, symbol) do
     sublist =
-      finder(board, {x, y})
+      row_finder(board, {x, y})
       |> List.update_at(x, fn _ -> symbol end)
 
-    List.update_at(board, Enum.count(board) - 1 - y, fn _ -> sublist end)
+    List.update_at(board, board_max_index(board) - y, fn _ -> sublist end)
+  end
+
+  defp board_max_index(board) do
+    Enum.count(board) - 1
   end
 
   @doc """
@@ -250,34 +252,19 @@ defmodule TicTacToe do
   end
 
   defp row_winner(board) do
-    winning_row =
-      Enum.find(board, fn row ->
-        cond do
-          row === ["X", "X", "X"] -> true
-          row === ["O", "O", "O"] -> true
-          true -> false
-        end
-      end)
+    winning_row = Enum.find(board, fn row -> all_same?(row) end)
 
-    case winning_row do
-      ["X", "X", "X"] -> {:ok, "X"}
-      ["O", "O", "O"] -> {:ok, "O"}
-      _ -> {:error, "bad luck"}
-    end
+    eval_subresult(winning_row)
   end
 
   defp col_winner(board) do
     winning_col =
-      Enum.find_value(0..(Enum.count(board) - 1), fn i ->
+      Enum.find_value(0..board_max_index(board), fn i ->
         col = Enum.map(board, fn row -> Enum.at(row, i) end)
         if all_same?(col), do: col, else: false
       end)
 
-    case winning_col do
-      ["X", "X", "X"] -> {:ok, "X"}
-      ["O", "O", "O"] -> {:ok, "O"}
-      _ -> {:error, "bad luck"}
-    end
+    eval_subresult(winning_col)
   end
 
   defp get_diag(winning_diag, board, callback) do
@@ -297,20 +284,40 @@ defmodule TicTacToe do
   defp diag_winner(board) do
     winning_diag =
       get_diag([nil, nil, nil], board, fn i, j -> i === j end)
-      |> get_diag(board, fn i, j -> i === @board_size - 1 - j end)
+      |> get_diag(board, fn i, j -> i === board_max_index(board) - j end)
 
-    case winning_diag do
-      ["X", "X", "X"] -> {:ok, "X"}
-      ["O", "O", "O"] -> {:ok, "O"}
-      _ -> {:error, "bad luck"}
+    eval_subresult(winning_diag)
+  end
+
+  defp eval_subresult(list) do
+    if list do
+      mapSet = MapSet.new(list)
+
+      if MapSet.size(mapSet) === 1 do
+        cond do
+          MapSet.member?(mapSet, "X") -> {:ok, "X"}
+          MapSet.member?(mapSet, "O") -> {:ok, "O"}
+          true -> {:error, "bad luck"}
+        end
+      else
+        {:error, "bad luck"}
+      end
+    else
+      {:error, "bad luck"}
     end
   end
 
-  def all_same?(list) do
-    case list do
-      ["X", "X", "X"] -> true
-      ["O", "O", "O"] -> true
-      _ -> false
+  defp all_same?(list) do
+    mapSet = MapSet.new(list)
+
+    if MapSet.size(mapSet) === 1 do
+      cond do
+        MapSet.member?(mapSet, "X") -> true
+        MapSet.member?(mapSet, "O") -> true
+        true -> false
+      end
+    else
+      false
     end
   end
 end
