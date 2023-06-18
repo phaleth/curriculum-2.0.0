@@ -252,9 +252,9 @@ defmodule TicTacToe do
   end
 
   defp row_winner(board) do
-    winning_row = Enum.find(board, fn row -> all_same?(row) end)
+    winning_row = Enum.find(board, fn row -> all_same?(row) end) || [nil, nil, nil]
 
-    eval_subresult(winning_row)
+    winning_entry(winning_row)
   end
 
   defp col_winner(board) do
@@ -262,9 +262,9 @@ defmodule TicTacToe do
       Enum.find_value(0..board_max_index(board), fn i ->
         col = Enum.map(board, fn row -> Enum.at(row, i) end)
         if all_same?(col), do: col, else: false
-      end)
+      end) || [nil, nil, nil]
 
-    eval_subresult(winning_col)
+    winning_entry(winning_col)
   end
 
   defp get_diag(winning_diag, board, callback) do
@@ -286,39 +286,24 @@ defmodule TicTacToe do
       get_diag([nil, nil, nil], board, fn i, j -> i === j end)
       |> get_diag(board, fn i, j -> i === board_max_index(board) - j end)
 
-    eval_subresult(winning_diag)
+    winning_entry(winning_diag)
   end
 
-  defp eval_subresult(list) do
-    if list do
-      mapSet = MapSet.new(list)
-
-      if MapSet.size(mapSet) === 1 do
-        cond do
-          MapSet.member?(mapSet, "X") -> {:ok, "X"}
-          MapSet.member?(mapSet, "O") -> {:ok, "O"}
-          true -> {:error, "bad luck"}
-        end
-      else
-        {:error, "bad luck"}
-      end
-    else
-      {:error, "bad luck"}
-    end
+  defp winning_entry([player | _] = row_col_diag) do
+    if player in ["X", "O"] and all_same?(row_col_diag),
+      do: {:ok, player},
+      else: {:error, "Bad luck"}
   end
 
-  defp all_same?(list) do
-    mapSet = MapSet.new(list)
+  defp all_same?(row_col_diag) do
+    mapSet = MapSet.new(row_col_diag)
 
-    if MapSet.size(mapSet) === 1 do
-      cond do
-        MapSet.member?(mapSet, "X") -> true
-        MapSet.member?(mapSet, "O") -> true
-        true -> false
+    MapSet.size(mapSet) === 1 &&
+      case MapSet.to_list(mapSet) do
+        ["X"] -> true
+        ["O"] -> true
+        _ -> false
       end
-    else
-      false
-    end
   end
 end
 ```
