@@ -81,7 +81,11 @@ defmodule CustomEnum do
     iex> CustomEnum.reverse([4, 5, 6, 7])
     [7, 6, 5, 4]
   """
-  def reverse(list) do
+  def reverse(list, acc \\ [])
+  def reverse([], acc), do: acc
+
+  def reverse([h | t], acc) do
+    reverse(t, [h | acc])
   end
 
   @doc """
@@ -95,7 +99,11 @@ defmodule CustomEnum do
     iex> CustomEnum.map([5, 4, 3], fn integer -> is_integer(integer) end)
     [true, true, true]
   """
-  def map(list, callback_function) do
+  def map(list, callback_function, acc \\ [])
+  def map([], _callback_function, acc), do: reverse(acc)
+
+  def map([h | t], callback_function, acc) do
+    map(t, callback_function, [callback_function.(h) | acc])
   end
 
   @doc """
@@ -110,7 +118,11 @@ defmodule CustomEnum do
     iex> CustomEnum.filter([1, "2", "3"], fn char -> is_bitstring(char) end)
     ["2", "3"]
   """
-  def filter(list, callback_function) do
+  def filter(list, callback_function, acc \\ [])
+  def filter([], _callback_function, acc), do: reverse(acc)
+
+  def filter([h | t], callback_function, acc) do
+    filter(t, callback_function, if(callback_function.(h), do: [h | acc], else: acc))
   end
 
   @doc """
@@ -124,7 +136,11 @@ defmodule CustomEnum do
     iex> CustomEnum.sum([1, 1, 1])
     3
   """
-  def sum(list_of_integers) do
+  def sum(list_of_integers, acc \\ 0)
+  def sum([], acc), do: acc
+
+  def sum([h | t], acc) do
+    sum(t, acc + h)
   end
 
   @doc """
@@ -138,7 +154,11 @@ defmodule CustomEnum do
     iex> CustomEnum.join(["Hello", ",", " ", "World", "!"])
     "Hello, World!"
   """
-  def join(list_of_strings) do
+  def join(list_of_strings, acc \\ "")
+  def join([], acc), do: acc
+
+  def join([h | t], acc) do
+    join(t, acc <> h)
   end
 end
 ```
