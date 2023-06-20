@@ -223,6 +223,7 @@ you can use [String.graphemes/1](https://hexdocs.pm/elixir/String.html#graphemes
 
 ```elixir
 String.graphemes("é")
+# String.split("é", "", trim: true)
 ```
 
 ### Your Turn
@@ -230,13 +231,13 @@ String.graphemes("é")
 Use [String.graphemes/1](https://hexdocs.pm/elixir/String.html#graphemes/1) to convert the [woman fire fighter](https://emojipedia.org/woman-firefighter/) emoji 👩‍🚒 to a list of graphemes.
 
 ```elixir
-
+String.graphemes("👩‍🚒")
 ```
 
 Use [String.codepoints/1](https://hexdocs.pm/elixir/String.html#codepoints/1) to convert the emoji 👩‍🚒 into a list of codepoints. You'll notice it's actually a combination of the 👩 and 🚒 emojis.
 
 ```elixir
-
+String.codepoints("👩‍🚒")
 ```
 
 ## Hexadecimal
@@ -328,7 +329,8 @@ Use hexadecimal `0x` syntax to represent the number `15`.
 </details>
 
 ```elixir
-
+# 0o17
+0xF
 ```
 
 ## Bitstrings
@@ -428,7 +430,8 @@ Convert the alphabet `"abcdefghijklmnopqrstuvwxyz"` to a charlist, then inspect 
 </details>
 
 ```elixir
-
+String.to_charlist("abcdefghijklmnopqrstuvwxyz")
+|> IO.inspect(charlists: :as_lists)
 ```
 
 ## Further Reading
