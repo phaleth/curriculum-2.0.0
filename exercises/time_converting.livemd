@@ -90,6 +90,12 @@ defmodule TimeConverter do
 
   """
   def to_seconds(amount, unit) do
+    case unit do
+      :seconds -> amount
+      :minutes -> 60 * amount
+      :hours -> 60 * 60 * amount
+      :days -> 24 * 60 * 60 * amount
+    end
   end
 
   @doc """
@@ -112,6 +118,12 @@ defmodule TimeConverter do
 
   """
   def from_seconds(amount, unit) do
+    case unit do
+      :seconds -> amount * 1.0
+      :minutes -> amount / 60
+      :hours -> amount / (60 * 60)
+      :days -> amount / (24 * 60 * 60)
+    end
   end
 end
 ```
