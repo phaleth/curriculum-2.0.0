@@ -158,9 +158,21 @@ defmodule Rollable do
     "Ice Shard: deal [12d4](https://www.google.com/search?q=roll+12d4) ice damage."
   """
   def replace(string) do
+    Regex.replace(~r/(.*?)(\d{1,2}d\d{1,2})(.*?)/, string, fn _match, first, second, third ->
+      first <> "[#{second}](https://www.google.com/search?q=roll+#{second})" <> third
+    end)
   end
 
   def roll(string) do
+    Regex.replace(~r/(.*?)(\d{1,2})d(\d{1,2})(.*?)/, string, fn _match,
+                                                                first,
+                                                                dice,
+                                                                sides,
+                                                                fourth ->
+      first <>
+        Integer.to_string(String.to_integer(dice) * Enum.random(1..String.to_integer(sides))) <>
+        fourth
+    end)
   end
 end
 ```
