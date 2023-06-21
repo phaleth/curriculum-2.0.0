@@ -34,13 +34,14 @@ outline = """
 ### Heading 3
 ## Heading 2
 ### Heading 3
+  Some paragraph
 ### Heading 3
 ### Heading 3
 ## Heading 2
 """
 
 new_outline =
-  Regex.replace(~r/(?<=)###(\s\w+\s\d)/, outline, fn match, grp1 ->
+  Regex.replace(~r/(?<=)###(\s.+?\s\d)/, outline, fn _match, grp1 ->
     "*" <> grp1
   end)
 
@@ -75,7 +76,7 @@ Replace Any Outline Between These Comments.
 """
 
 Regex.replace(
-  ~r/.*?(<!--\scourse-outline-start\s-->\n)(.*?)\n(<!--\scourse-outline-end\s-->\n).*?/,
+  ~r/(<!--\scourse-outline-start\s-->\n)(.*?)\n(<!--\scourse-outline-end\s-->\n)/,
   text,
   fn _match, grp1, _grp2, grp3 ->
     grp1 <> new_outline <> grp3
@@ -129,5 +130,22 @@ This overview shouldn't be affected.
 ```
 
 ```elixir
+outline = """
+### Course Tools
 
+* Reading
+  * [Command Line](reading/command_line.livemd)
+  * [Git](reading/git.livemd)
+  * [Livebook](reading/livebook.livemd)
+  * [Code Editors](reading/code_editors.livemd)
+  * [IEx](reading/iex.livemd)
+* Exercises
+  * [Command Line Family Tree](exercises/command_line_family_tree.livemd)
+  * [GitHub Engineering Journal](exercises/github_engineering_journal.livemd)
+  * [GitHub Collab](exercises/github_collab.livemd)
+"""
+
+filename = ".*?"
+
+chapters = Regex.scan(~r/(?<=\s\s)\*\s\[.+?\]\(#{filename}\)/, outline)
 ```
