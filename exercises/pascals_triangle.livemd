@@ -173,7 +173,27 @@ defmodule Pascal do
       iex> Pascal.of(5)
       [[1], [1, 1], [1, 2, 1], [1, 3, 3, 1], [1, 4, 6, 4, 1]]
   """
-  def of(n) do
+  def of(num), do: pascals(num) |> Enum.reverse()
+
+  def pascals(1), do: [[1]]
+
+  def pascals(n) do
+    prev_triangle = [prev_row | _] = pascals(n - 1)
+    IO.inspect(prev_triangle, label: "prev_triangle")
+    IO.inspect(prev_row, label: "prev_row")
+
+    new_row =
+      [0 | prev_row]
+      |> Enum.chunk_every(2, 1)
+      |> Enum.map(&Enum.sum/1)
+
+    IO.inspect(new_row, label: "new_row")
+
+    [
+      new_row
+      | prev_triangle
+    ]
+    |> IO.inspect(label: "new_triangle")
   end
 end
 ```
