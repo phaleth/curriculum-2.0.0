@@ -133,7 +133,11 @@ defmodule Lucas do
     iex> Lucas.number(20)
     15127
   """
+  def number(0), do: 2
+  def number(1), do: 1
+
   def number(n) do
+    number(n - 1) + number(n - 2)
   end
 
   @doc """
@@ -156,8 +160,12 @@ defmodule Lucas do
     iex> Lucas.sequence(10)
     [2, 1, 3, 4, 7, 11, 18, 29, 47, 76]
   """
-
-  def sequence(length) do
+  def sequence(length, acc \\ []) do
+    if length <= 0 do
+      acc
+    else
+      sequence(length - 1, [number(length - 1) | acc])
+    end
   end
 end
 ```
