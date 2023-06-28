@@ -152,7 +152,12 @@ We can use the match operator anytime we have a value bound to a parameter or va
 Create a `case` statement that will return the first element in a 2 element tuple, or the first element in 2 element a list.
 
 ```elixir
+tuple_or_list = [1]
 
+case tuple_or_list do
+  {first} -> to_string(first) <> " from a tuple"
+  [first] -> to_string(first) <> " from a list"
+end
 ```
 
 Use pattern matching to ensure the `Check.must_have_elements!/1` function returns true when called with a list that has more than one element and otherwise causes a [FunctionClauseError](https://hexdocs.pm/elixir/FunctionClauseError.html).
