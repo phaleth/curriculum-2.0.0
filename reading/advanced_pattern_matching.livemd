@@ -191,7 +191,7 @@ defmodule Check do
       iex> Check.must_have_elements!([])
       ** (FunctionClauseError) no function clause matching in Check.must_have_elements!/1
   """
-  def must_have_elements!([_h | _t] = list) do
+  def must_have_elements!([_h | _t] = _list) do
     true
   end
 end
@@ -296,15 +296,15 @@ defmodule Greeter do
       iex> Greeter.hello(["Swamy", "Jeff", "Jeremy"])
       "Hello everyone!"
   """
-  def hello([name] = names) do
+  def hello([name] = _names) do
     "Hi #{name}!"
   end
 
-  def hello([name1, name2] = names) do
+  def hello([name1, name2] = _names) do
     "Hi #{name1}, Hello #{name2}!"
   end
 
-  def hello([name1, name2 | _] = names) do
+  def hello([_name1, _name2 | _] = _names) do
     "Hello everyone!"
   end
 end
@@ -368,7 +368,10 @@ end)
 </details>
 
 ```elixir
-
+Enum.map([{:double, 2}, {:halve, 10}, {:double, 4}], fn
+  {:double, val} -> val * 2
+  {:halve, val} -> div(val, 2)
+end)
 ```
 
 ## Pattern Matching Vs. If
@@ -537,7 +540,7 @@ actual = {"hello", "hi"}
 expected = {"hello"}
 actual = {"hello", "hi"}
 
-expected = actual
+^expected = actual
 ```
 
 ## Further Reading
