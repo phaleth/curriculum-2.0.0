@@ -15,12 +15,12 @@ defmodule GildedRose do
   end
 
   defp update_item_quality(item) do
-    if item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" do
-      update_non_sulfuras_quantity(item)
-    else
+    if item.name == "Aged Brie" or item.name == "Backstage passes to a TAFKAL80ETC concert" do
       if item.quality < 50,
         do: increase_item_quality(item),
         else: item
+    else
+      update_non_sulfuras_quantity(item)
     end
   end
 
