@@ -83,7 +83,31 @@ end
 
 ```elixir
 defmodule Metric do
+  @doc """
+  iex> Metric.convert({:centimeter, 100.0}, :meter)
+  1.0
+
+  iex> Metric.convert({:kilometer, 100.0}, :meter)
+  100_000.0
+  """
   def convert(from, to) do
+    val = millimeters(from)
+
+    case to do
+      :millimeter -> val / 1.0
+      :centimeter -> val / 10.0
+      :meter -> val / 1_000.0
+      :kilometer -> val / 1_000_000.0
+    end
+  end
+
+  defp millimeters({unit, val}) do
+    case unit do
+      :millimeter -> val * 1.0
+      :centimeter -> val * 10.0
+      :meter -> val * 1_000.0
+      :kilometer -> val * 1_000_000.0
+    end
   end
 end
 ```
