@@ -91,23 +91,15 @@ defmodule Metric do
   100_000.0
   """
   def convert(from, to) do
-    val = millimeters(from)
+    units = %{
+      millimeter: 1.0,
+      centimeter: 10.0,
+      meter: 1_000.0,
+      kilometer: 1_000_000.0
+    }
 
-    case to do
-      :millimeter -> val / 1.0
-      :centimeter -> val / 10.0
-      :meter -> val / 1_000.0
-      :kilometer -> val / 1_000_000.0
-    end
-  end
-
-  defp millimeters({unit, val}) do
-    case unit do
-      :millimeter -> val * 1.0
-      :centimeter -> val * 10.0
-      :meter -> val * 1_000.0
-      :kilometer -> val * 1_000_000.0
-    end
+    {unit, val} = from
+    val * units[unit] / units[to]
   end
 end
 ```
