@@ -205,7 +205,13 @@ end
 </details>
 
 ```elixir
+defimpl Adder, for: List do
+  def add(list1, list2) do
+    list1 ++ list2
+  end
+end
 
+Adder.add([1, 2], [3, 4])
 ```
 
 ## Protocols With Structs
@@ -285,7 +291,11 @@ end
 </details>
 
 ```elixir
-
+defimpl Sound, for: Dog do
+  def say(dog) do
+    "Woof!"
+  end
+end
 ```
 
 For more information, there is a talk by Kevin Rockwood.
