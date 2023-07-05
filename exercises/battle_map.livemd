@@ -100,6 +100,15 @@ end
 
 ```elixir
 # Implementation Goes Here:
+defimpl Character, for: Barbarian do
+  def can_attack?(character, origin, target) do
+    {ox, oy} = origin
+    {tx, ty} = target
+    x_dist = if ox < tx, do: tx - ox, else: ox - tx
+    y_dist = if oy < ty, do: ty - oy, else: oy - ty
+    x_dist <= 2 and y_dist <= 2
+  end
+end
 
 # You May Use The Following Test Suite To Validate Your Solution.
 ExUnit.start(auto_run: false)
@@ -163,6 +172,15 @@ Create a `Wizard` implementation for the `Character` protocol.
 
 ```elixir
 # Implementation Goes Here:
+defimpl Character, for: Wizard do
+  def can_attack?(character, origin, target) do
+    {ox, oy} = origin
+    {tx, ty} = target
+    x_dist = if ox < tx, do: tx - ox, else: ox - tx
+    y_dist = if oy < ty, do: ty - oy, else: oy - ty
+    x_dist <= 2 and y_dist <= 2
+  end
+end
 
 # You May Use The Following Test Suite To Validate Your Solution.
 ExUnit.start(auto_run: false)
