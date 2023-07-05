@@ -96,6 +96,14 @@ defmodule Message do
     ** (FunctionClauseError) no function clause matching in Message.send/1
   """
   defstruct [:body]
+
+  def send(message) when is_binary(message) do
+    "Sent: #{message}"
+  end
+
+  def send(message) when is_struct(message) do
+    "Sent: #{message.body}"
+  end
 end
 ```
 
