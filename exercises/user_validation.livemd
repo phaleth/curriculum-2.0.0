@@ -66,13 +66,13 @@ defmodule User do
 
   def validate_users(users) do
     Enum.map(users, fn user ->
-      case user do
-        %User{name: nil} -> {:error, :missing_name}
-        %User{name: name} -> {:ok, %User{name: name}}
+      with %User{name: name} <- user,
+           {:missing_name, true} <- {:missing_name, is_binary(name)} do
+        {:ok, user}
+      else
+        {:missing_name, false} -> {:error, :missing_name}
         _ -> {:error, :not_a_user}
       end
-
-      # TODO: worry about how to use with maybe later
     end)
   end
 end
