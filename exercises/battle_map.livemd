@@ -64,6 +64,10 @@ end
 defmodule Barbarian do
   defstruct []
 end
+
+defmodule Archer do
+  defstruct []
+end
 ```
 
 ## Barbarian
@@ -101,7 +105,7 @@ end
 ```elixir
 # Implementation Goes Here:
 defimpl Character, for: Barbarian do
-  def can_attack?(character, origin, target) do
+  def can_attack?(_character, origin, target) do
     {ox, oy} = origin
     {tx, ty} = target
     x_dist = if ox < tx, do: tx - ox, else: ox - tx
@@ -173,12 +177,12 @@ Create a `Wizard` implementation for the `Character` protocol.
 ```elixir
 # Implementation Goes Here:
 defimpl Character, for: Wizard do
-  def can_attack?(character, origin, target) do
+  def can_attack?(_character, origin, target) do
     {ox, oy} = origin
     {tx, ty} = target
     x_dist = if ox < tx, do: tx - ox, else: ox - tx
     y_dist = if oy < ty, do: ty - oy, else: oy - ty
-    x_dist <= 2 and y_dist <= 2
+    x_dist === y_dist || ox === tx || oy === ty
   end
 end
 
@@ -232,7 +236,59 @@ true
 Implement your custom character below.
 
 ```elixir
+# Implementation Goes Here:
+defimpl Character, for: Archer do
+  def can_attack?(_character, origin, target) do
+    {ox, oy} = origin
+    {tx, ty} = target
+    x_dist = if ox < tx, do: tx - ox, else: ox - tx
+    y_dist = if oy < ty, do: ty - oy, else: oy - ty
+    x_dist == 3 and y_dist == 3
+  end
+end
 
+# You May Use The Following Test Suite To Validate Your Solution.
+ExUnit.start(auto_run: false)
+
+defmodule ArcherTests do
+  use ExUnit.Case
+
+  describe "Archer" do
+    test "can attack at distance of three of current position" do
+      for x <- 1..7,
+          y <- 1..7,
+          (x === 1 and y === 1) or (x === 7 and y === 7) or (x === 1 and y === 7) or
+            (x === 7 and y === 1) do
+        assert Character.can_attack?(%Archer{}, {4, 4}, {x, y})
+      end
+    end
+
+    test "cannot attack within inside three squares of current position" do
+      refute Character.can_attack?(%Archer{}, {4, 4}, {2, 2})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {6, 6})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {6, 2})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {2, 6})
+
+      refute Character.can_attack?(%Archer{}, {4, 4}, {3, 3})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {5, 5})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {5, 3})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {3, 5})
+    end
+
+    test "cannot attack beyond three squares of current position" do
+      refute Character.can_attack?(%Archer{}, {4, 4}, {0, 0})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {8, 8})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {8, 0})
+      refute Character.can_attack?(%Archer{}, {4, 4}, {0, 8})
+    end
+
+    test "logic is not hardcoded to the {4, 4} position" do
+      refute Character.can_attack?(%Archer{}, {3, 3}, {8, 8})
+    end
+  end
+end
+
+ExUnit.run()
 ```
 
 ## Commit Your Progress
