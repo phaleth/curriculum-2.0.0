@@ -1,3 +1,3 @@
-defmodule Archer do
+defmodule BattleMap.Archer do
   defstruct []
 end

@@ -1,3 +1,3 @@
-defmodule Wizard do
+defmodule BattleMap.Wizard do
   defstruct []
 end

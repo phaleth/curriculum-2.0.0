@@ -1,5 +1,9 @@
 defmodule CharacterTests do
   use ExUnit.Case
+  alias BattleMap.Character
+  alias BattleMap.Barbarian
+  alias BattleMap.Wizard
+  alias BattleMap.Archer
 
   describe "Barbarian" do
     test "can attack within two squares of current position" do

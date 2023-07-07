@@ -1,3 +1,3 @@
-defmodule Barbarian do
+defmodule BattleMap.Barbarian do
   defstruct []
 end

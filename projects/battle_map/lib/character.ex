@@ -1,8 +1,8 @@
-defprotocol Character do
+defprotocol BattleMap.Character do
   def can_attack?(character, origin, target)
 end
 
-defimpl Character, for: Barbarian do
+defimpl BattleMap.Character, for: BattleMap.Barbarian do
   def can_attack?(_character, origin, target) do
     {ox, oy} = origin
     {tx, ty} = target
@@ -12,7 +12,7 @@ defimpl Character, for: Barbarian do
   end
 end
 
-defimpl Character, for: Wizard do
+defimpl BattleMap.Character, for: BattleMap.Wizard do
   def can_attack?(_character, origin, target) do
     {ox, oy} = origin
     {tx, ty} = target
@@ -22,7 +22,7 @@ defimpl Character, for: Wizard do
   end
 end
 
-defimpl Character, for: Archer do
+defimpl BattleMap.Character, for: BattleMap.Archer do
   def can_attack?(_character, origin, target) do
     {ox, oy} = origin
     {tx, ty} = target
