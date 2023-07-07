@@ -139,7 +139,7 @@ File.ls()
 To clean up the file, uncomment the following code which should remove it.
 
 ```elixir
-# File.rm("file.txt")
+File.rm("file.txt")
 ```
 
 Now the file should no longer exist. Let's check with [File.exists?/2](https://hexdocs.pm/elixir/File.html#exists?/2).
@@ -157,7 +157,8 @@ DO NOT DELETE IMPORTANT FILES ON YOUR SYSTEM WHEN USING THE FILE MODULE
 </div>
 
 ```elixir
-
+{:ok, contents} = File.read("01-intro.livemd")
+Regex.run(~r/#\s(.+?)\n/, contents) |> Enum.at(1)
 ```
 
 ## Path Module Functions
@@ -197,7 +198,7 @@ Path.join(path1, path2)
 Experiment with the functions above. Refer to the documentation for examples you can try.
 
 ```elixir
-
+Path.absname("")
 ```
 
 ## Bang Functions
@@ -334,6 +335,8 @@ File.rm!("open_close.txt")
 
 ```elixir
 File.write!("open_close.txt", content)
+
+File.read("open_close.txt") |> IO.inspect(label: "Original File")
 
 {:ok, file} = File.open("open_close.txt", [:write])
 
