@@ -230,7 +230,11 @@ In the Elixir cell below, try refactoring this code using the [Stream](https://h
 ```
 
 ```elixir
-
+1..100
+|> Stream.map(fn each -> div(each, 2) end)
+|> Stream.map(fn each -> each * 3 end)
+|> Stream.filter(fn each -> rem(each, 2) === 0 end)
+|> Enum.to_list()
 ```
 
 ## Stream Gotchas
@@ -350,7 +354,7 @@ flowchart LR
 ```
 
 ```elixir
-Stream.iterate(0, fn accumulator -> accumulator + 1 end) |> Enum.take(5)
+Stream.iterate({0, 0}, fn {i, j} -> {i + 1, j + 1} end) |> Enum.take(5)
 ```
 
 The initial value of the accumulator will be `0`. The next value of the accumulator will
@@ -430,7 +434,10 @@ end)
 </details>
 
 ```elixir
-
+Stream.iterate(20, fn acc ->
+  if rem(acc, 2) == 1, do: acc * 3 + 1, else: div(acc, 2)
+end)
+|> Enum.take_while(fn num -> num !== 4 end)
 ```
 
 ### Stream.unfold/2
@@ -491,7 +498,7 @@ end)
 </details>
 
 ```elixir
-
+Stream.unfold(1, fn acc -> {acc ** 3, acc + 1} end) |> Enum.take(20)
 ```
 
 ## Commit Your Progress
