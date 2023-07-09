@@ -70,15 +70,24 @@ defmodule TodoList do
   @moduledoc """
   Documentation for `TodoList`
   """
+  @path "./todos.txt"
+
   @doc """
   Retrieve the todo list.
 
   ## Examples
 
-      iex> TodoList.list()
+      TodoList.list()
       []
   """
   def list do
+    case File.read(@path) do
+      {:error, :enoent} ->
+        []
+
+      {:ok, contents} ->
+        String.split(contents, "\n")
+    end
   end
 
   @doc """
@@ -92,6 +101,11 @@ defmodule TodoList do
       ["task 2", "task 1"]
   """
   def add(item) do
+    contents = list()
+
+    new_contents = contents ++ [item]
+    File.write!(@path, Enum.join(new_contents, "\n"))
+    new_contents
   end
 
   @doc """
@@ -105,6 +119,11 @@ defmodule TodoList do
       ["task 2", "task 1"]
   """
   def complete(item) do
+    contents = list()
+
+    new_contents = contents -- [item]
+    File.write!(@path, Enum.join(new_contents, "\n"))
+    new_contents
   end
 end
 ```
