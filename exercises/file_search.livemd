@@ -94,6 +94,8 @@ defmodule FileSearch do
   ["file1.txt", "file2.txt", "file3.txt", "file4.txt"]
   """
   def all(folder) do
+    Path.wildcard(Path.join(folder, "**/*.*"))
+    |> Enum.map(&(String.split(&1, "/") |> List.last()))
   end
 
   @doc """
@@ -124,6 +126,14 @@ defmodule FileSearch do
   }
   """
   def by_extension(folder) do
+    all(folder)
+    |> Enum.reduce(%{}, fn file_name, acc ->
+      ext = String.split(file_name, ".") |> List.last()
+
+      Map.update(acc, ".#{ext}", [file_name], fn file_names ->
+        [file_name | file_names] |> Enum.reverse()
+      end)
+    end)
   end
 end
 ```
