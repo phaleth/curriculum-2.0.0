@@ -140,6 +140,11 @@ defmodule CounterServer do
   end
 
   @impl true
+  def handle_cast(:decrement, state) do
+    {:noreply, state - 1}
+  end
+
+  @impl true
   def handle_call(:get_count, _from, state) do
     # `response` bound for sake of clarity.
     response = state
@@ -153,6 +158,7 @@ Using the GenServer above, here's an example of sending an asynchronous message 
 ```elixir
 {:ok, pid} = GenServer.start_link(CounterServer, [])
 GenServer.cast(pid, :increment)
+GenServer.cast(pid, :decrement)
 GenServer.call(pid, :get_count)
 ```
 
@@ -422,7 +428,7 @@ Named processes are unique, there cannot be two processes with the same name. Na
 ```elixir
 defmodule NamedCounter do
   def start_link(_opts) do
-    GenServer.start_link(NamedCounter, [], name: NamedCounter)
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
   def init(_init_arg) do
