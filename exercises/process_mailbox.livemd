@@ -139,6 +139,22 @@ defmodule Mailbox do
       "Hello!"
   """
   def loop(state \\ []) do
+    # :erlang.process_info(self(), :messages) |> IO.inspect()
+    receive do
+      {:send, msg} ->
+        loop([msg | state])
+
+      {:read, caller_pid} ->
+        case state do
+          [] ->
+            send(caller_pid, :empty)
+            loop([])
+
+          [head | tail] ->
+            send(caller_pid, head)
+            loop(tail)
+        end
+    end
   end
 end
 ```
