@@ -64,7 +64,17 @@ end
 </details>
 
 ```elixir
+defmodule Zero do
+  use GenServer
 
+  @impl true
+  def init(_init_args) do
+    {:ok, 0}
+  end
+end
+
+{:ok, pid} = GenServer.start_link(Zero, "bogus")
+:sys.get_state(pid)
 ```
 
 Use [GenServer.start_link/3](https://hexdocs.pm/elixir/GenServer.html#start_link/3) to start your `Zero` [GenServer](https://hexdocs.pm/elixir/GenServer.html) as a named process.
@@ -79,7 +89,7 @@ GenServer.start_link(Zero, "init_arg", [name: :my_name])
 </details>
 
 ```elixir
-
+GenServer.start_link(Zero, "bogus", name: :my_zero)
 ```
 
 Create a `SimpleCounter` [GenServer](https://hexdocs.pm/elixir/GenServer.html) whose state starts as `0`. Implement a [GenServer.handle_call/3](https://hexdocs.pm/elixir/GenServer.html#handle_call/3) callback function which accepts the `:increment` message and increments the state by `1` and returns `:ok`.
@@ -112,7 +122,23 @@ GenServer.call(pid, :increment)
 </details>
 
 ```elixir
+defmodule SimpleCounter do
+  use GenServer
 
+  @impl true
+  def init(_init_args) do
+    {:ok, 0}
+  end
+
+  @impl true
+  def handle_call(:increment, _from, state) do
+    {:reply, :ok, state + 1}
+  end
+end
+
+{:ok, pid} = GenServer.start_link(SimpleCounter, "bogus")
+GenServer.call(pid, :increment)
+:sys.get_state(pid)
 ```
 
 Create an `InitialState` [GenServer](https://hexdocs.pm/elixir/GenServer.html) whose initial state can be configured. Call [GenServer.start_link/3](https://hexdocs.pm/elixir/GenServer.html#start_link/3) to spawn a `State` GenServer with an initial state. Use `:sys.get_state/1` to confirm the state matches your configured state.
@@ -138,7 +164,21 @@ end
 </details>
 
 ```elixir
+defmodule InitialState do
+  use GenServer
 
+  @impl true
+  def init(state) do
+    {:ok, state}
+  end
+end
+
+{:ok, pid} = GenServer.start_link(InitialState, "hi")
+:sys.get_state(pid)
+```
+
+```elixir
+InitialState.__info__(:functions)
 ```
 
 Create a `State` module.
@@ -197,7 +237,46 @@ State.set(pid, "updated state")
 </details>
 
 ```elixir
+defmodule State do
+  use GenServer
 
+  # client API
+
+  def get(pid) do
+    GenServer.call(pid, :get)
+  end
+
+  def set(pid, new_state) do
+    GenServer.cast(pid, {:set, new_state})
+  end
+
+  def start_link(init_state) do
+    GenServer.start_link(__MODULE__, init_state)
+  end
+
+  # server API
+
+  @impl true
+  def init(state) do
+    {:ok, state}
+  end
+
+  @impl true
+  def handle_call(:get, _from, state) do
+    response = state
+    {:reply, response, state}
+  end
+
+  @impl true
+  def handle_cast({:set, new_state}, _state) do
+    {:noreply, new_state}
+  end
+end
+
+{:ok, pid} = State.start_link("initial state")
+"initial state" = State.get(pid)
+State.set(pid, "updated state")
+"updated state" = State.get(pid)
 ```
 
 Create a minimal `Named` [GenServer](https://hexdocs.pm/elixir/GenServer.html) that can be started and configured as a named process using `Named.start_link/1`. Start a `Named` process and use [GenServer.whereis/1](https://hexdocs.pm/elixir/GenServer.html#whereis/1) and/or [Process.whereis/1](https://hexdocs.pm/elixir/Process.html#whereis/1) to find the pid of the named process.
@@ -226,7 +305,25 @@ Process.whereis(:my_configured_name)
 </details>
 
 ```elixir
+defmodule Named do
+  use GenServer
 
+  # client API
+
+  def start_link(init_state, name) do
+    GenServer.start_link(__MODULE__, init_state, name: name)
+  end
+
+  # server API
+
+  @impl true
+  def init(state) do
+    {:ok, state}
+  end
+end
+
+Named.start_link("initial state", :my_named_server)
+GenServer.whereis(:my_named_server)
 ```
 
 Create a minimal `NamedState` [GenServer](https://hexdocs.pm/elixir/GenServer.html) that can be started and configured as a named process with a configurable state using `NamedState.start_link`. Use `:sys.get_state/1` to confirm the initial state is as expected and [GenServer.whereis/1](https://hexdocs.pm/elixir/GenServer.html#whereis/1) and/or [Process.whereis/1](https://hexdocs.pm/elixir/Process.html#whereis/1) to find the pid of the named process.
@@ -281,7 +378,26 @@ Process.whereis(:keyword_list_example)
 </details>
 
 ```elixir
+defmodule NamedState do
+  use GenServer
 
+  # client API
+
+  def start_link(init_state, name) do
+    GenServer.start_link(__MODULE__, init_state, name: name)
+  end
+
+  # server API
+
+  @impl true
+  def init(state) do
+    {:ok, state}
+  end
+end
+
+NamedState.start_link("initial state", :my_named_state_server)
+pid = GenServer.whereis(:my_named_state_server)
+:sys.get_state(pid)
 ```
 
 ## Commit Your Progress
