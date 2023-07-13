@@ -72,16 +72,37 @@ defmodule Stack do
 
   use GenServer
 
-  def start_link(_opts) do
+  def start_link(opts) do
+    GenServer.start_link(__MODULE__, opts)
   end
 
   def push(stack_pid, element) do
+    GenServer.cast(stack_pid, {:push, element})
   end
 
   def pop(stack_pid) do
+    GenServer.call(stack_pid, :pop)
   end
 
   # Define the necessary Server callback functions:
+
+  @impl true
+  def init(init_args) do
+    {:ok, init_args}
+  end
+
+  @impl true
+  def handle_cast({:push, element}, state) do
+    {:noreply, [element | state]}
+  end
+
+  @impl true
+  def handle_call(:pop, _from, state) do
+    case state do
+      [response | new_state] -> {:reply, response, new_state}
+      [] -> {:reply, nil, state}
+    end
+  end
 end
 ```
 
