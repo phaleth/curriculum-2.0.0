@@ -1,0 +1,199 @@
+# Non-Enumerables And Comprehensions
+
+## Non-Enumerables
+
+Q: What are some examples of non-enumerable vs enumerable data structures?
+
+* number, string and tuple type are non-enumerables
+* tuple is a collection but not enumerable, tuple is eagerly evaluated and can hold any data types
+* range is enumerable but not a collection, range is lazily evaluated and expects integers
+* tuple is stored contiguously in memory
+  ![](images/tuple_storage_contiguously.png)
+
+<!-- livebook:{"break_markdown":true} -->
+
+Q: How do you enumerate over non-enumerable data structures?
+
+* can't enumerate over non-enumerable data types
+* convert the data into an enumerable data type
+* for example `"abc"` into `["a", "b", "c"]`
+
+<!-- livebook:{"break_markdown":true} -->
+
+Q: How do you convert non-enumerable data structures into enumerable data structures?
+
+```elixir
+Integer.digits(123)
+```
+
+```elixir
+Tuple.to_list({1, "two", [~c"3"]})
+```
+
+```elixir
+String.split("abcde", "", trim: true)
+```
+
+## Comprehensions
+
+Q: When should we use comprehensions vs [Enum](https://hexdocs.pm/elixir/Enum.html)?
+
+* in [Elixir]() comprehensions are syntatic sugar and the use of Enum module is prefered
+* in [Erlang]() there is no Enum module, there is a list comprehension that is used more often than say comprehensions in Elixir
+
+```elixir
+for _x <- [1, 2, 3], x = y <- ["a", "b", "c"], do: {x, y}
+```
+
+ChatGPT Answer: Following Erlang code is a list comprehension. It creates a list of tuples, where each tuple is a combination of an element from the list. `[1,2,3]` and an element from the list `["a","b","c"]`. The resulting list is: `[{1,"a"},{2,"b"},{3,"c"}]`.
+
+```erlang
+[{X,Y} || X <- [1,2,3], X=Y <- ["a","b","c"]].
+```
+
+```elixir
+Enum.zip_reduce([[1, 2, 3], ["a", "b", "c"]], [], fn elements, acc ->
+  [_x, y] = elements
+  x = y
+  [{x, y} | acc]
+end)
+|> Enum.reverse()
+```
+
+Q: How do we create a comprehension using generators, filters, and collectables?
+
+* <strong>Generator</strong> is an enumerable the comprehension will enumerate over to produce output
+
+```elixir
+for item <- 1..3 do
+  item * 2
+end
+```
+
+* <strong>Filter</strong> is a true/false condition the generator uses to determine which elements should remain
+
+```elixir
+for item <- 1..3, item >= 2 do
+  item
+end
+```
+
+* by default, comprehension <strong>Collect</strong>s the result into a list, but `:into` options can be specified to change that default
+
+```elixir
+for item <- 1..3, into: "" do
+  "#{item}"
+end
+```
+
+* comprehensions can be used as a <strong>Reduce</strong>r with the `:reduce` option
+
+```elixir
+for item <- 1..3, reduce: "" do
+  acc -> acc <> to_string(item)
+end
+```
+
+* finally comprehensions can iterate over a <strong>Stream</strong>
+
+```elixir
+stream =
+  Stream.iterate(0, &(&1 + 1))
+  |> Stream.take(10)
+
+for num <- stream, rem(num, 2) === 0 do
+  IO.puts("#{num} is even")
+end
+```
+
+Extra Q: Where is my indexed for loop?
+
+* there isn't, lists are implemented as singly-linked lists and tuples are non-enumerables even tho tuples provide constant time access
+* `Enum.at(list, idx)` is of `O(n)` complexity
+
+```elixir
+list = [
+  "difficulty",
+  "lily",
+  "exact",
+  "cheat",
+  "indication",
+  "nose",
+  "diplomatic",
+  "version",
+  "fear",
+  "aid",
+  "conflict",
+  "throne",
+  "market",
+  "score",
+  "bomb",
+  "chief",
+  "menu",
+  "jet",
+  "disorder",
+  "inspector",
+  "decide",
+  "cheese",
+  "pan",
+  "feeling",
+  "grant",
+  "X-ray",
+  "systematic",
+  "steep",
+  "possibility",
+  "plain",
+  "conception",
+  "visit",
+  "ring",
+  "positive",
+  "relax",
+  "squeeze",
+  "leave",
+  "unlawful",
+  "snack",
+  "dentist",
+  "creation",
+  "vain",
+  "colorful",
+  "contradiction",
+  "tile",
+  "archive",
+  "birth",
+  "cold",
+  "home",
+  "knife"
+]
+```
+
+```elixir
+val_idx_pairs = Enum.with_index(list)
+tuple = List.to_tuple(list)
+digits = 3
+
+for {_, i} <- val_idx_pairs do
+  zero_padded_idx = String.pad_leading(to_string(i), digits, "0")
+  value = elem(tuple, i)
+  "#{zero_padded_idx}: #{value}"
+end
+```
+
+```elixir
+elem(tuple, 21)
+```
+
+ChatGPT Answer: Following code is using a list comprehension to iterate over a list of three elements, each of which is the result of calling the function `hd()` with a single-character argument. The code is then using the bitstring syntax to add each element to an empty bitstring (`<<>>`). So, the final result of this code will be a bitstring containing the three characters `'a'`, `'b'`, and `'c'`.
+
+```elixir
+for c <- [hd(~c"a"), hd(~c"b"), hd(~c"c")], do: <<c::utf8>>, into: <<>>
+```
+
+```elixir
+item1 = :erlang.term_to_binary("difficulty")
+```
+
+```elixir
+item1 <> <<0>>
+```
+
+🤓

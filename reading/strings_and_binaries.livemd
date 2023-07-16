@@ -374,7 +374,7 @@ not be interpreted as a charlist.
 You can define a charlist using single quotes `''`.
 
 ```elixir
-'hello'
+~c"hello"
 ```
 
 This charlist is equivalent to a list of the code points for a string.
@@ -387,13 +387,13 @@ Charlists are a list of integers, so they can be enumerated through and will ret
 charlist. Here's how we could shift each character up one code point.
 
 ```elixir
-Enum.map('abcde', fn each -> each + 1 end)
+Enum.map(~c"abcde", fn each -> each + 1 end)
 ```
 
 You can convert a charlist back into a string with [List.to_string/1](https://hexdocs.pm/elixir/List.html#to_string/1).
 
 ```elixir
-List.to_string('hello')
+List.to_string(~c"hello")
 ```
 
 Or convert a string into a charlist with [String.to_charlist/1](https://hexdocs.pm/elixir/String.html#to_charlist/1).
