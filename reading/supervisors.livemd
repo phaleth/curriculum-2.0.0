@@ -206,7 +206,8 @@ Process.exit(pid, :exit)
 Re-evaluate the diagram above and you should see a new `Worker` process started with a different pid. Repeat this process to kill each process under the supervisor and see them restarted.
 
 ```elixir
-
+pid = :c.pid(0, 271, 0)
+Process.exit(pid, :exit)
 ```
 
 ## Restart Strategies
@@ -446,7 +447,22 @@ So the timeline of crashes would be:
 Start **four** `Bomb` processes under a supervisor with different bomb times. Try each restart strategy `:one_for_one`, `one_for_all`, and `:rest_for_one`. Predict the crash timeline then evaluate your code. Did the result match your prediction?
 
 ```elixir
+children = [
+  %{
+    id: :bomb3,
+    start: {Bomb, :start_link, [[name: "Bomb 1", bomb_time: 3000]]}
+  },
+  %{
+    id: :bomb1,
+    start: {Bomb, :start_link, [[name: "Bomb 2", bomb_time: 2000]]}
+  },
+  %{
+    id: :bomb2,
+    start: {Bomb, :start_link, [[name: "Bomb 3", bomb_time: 1000]]}
+  }
+]
 
+{:ok, Supervisor_pid} = Supervisor.start_link(children, Strategy: :rest_for_one, Max_restarts: 5)
 ```
 
 ## Syntax Sugar
