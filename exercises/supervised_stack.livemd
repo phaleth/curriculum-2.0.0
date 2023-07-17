@@ -44,7 +44,7 @@ Here's an example Stack GenServer you can use.
 defmodule Stack do
   use GenServer
 
-  def start_link(opts) do
+  def start_link(_opts) do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
@@ -73,7 +73,7 @@ will crash due to a function clause error because the `handle_call/2` function e
 Uncomment the following code to watch the `Stack` crash.
 
 ```elixir
-# {:ok, pid} = GenServer.start_link(Stack, [])
+{:ok, stack_pid} = GenServer.start_link(Stack, [])
 # GenServer.call(stack_pid, :pop)
 ```
 
