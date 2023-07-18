@@ -1,0 +1,59 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+
+/* button excercise */
+.click-me-btn {
+  margin: 1rem;
+  border: 6px solid orange;
+  width: 10rem;
+  height: 4rem;
+  border-radius: 2rem;
+  font-size: 200%;
+}
+
+.click-me-btn:hover {
+  background-color: orange;
+}
+
+/* navigation */
+.top-nav {
+  margin: 1rem 0;
+}
+
+.top-nav a {
+  margin: 0 1rem;
+}
+
+/* rainbow excercise */
+.red {
+  padding: 1rem;
+  background-color: red;
+}
+.orange {
+  padding: 1rem;
+  background-color: orange;
+}
+.yellow {
+  padding: 1rem;
+  background-color: yellow;
+}
+.green {
+  padding: 1rem;
+  background-color: green;
+}
+.blue {
+  padding: 1rem;
+  background-color: blue;
+}
+.purple {
+  padding: 1rem;
+  background-color: purple;
+}
+.text-box {
+  padding: 1rem;
+  background-color: white;
+  text-align: center;
+}
