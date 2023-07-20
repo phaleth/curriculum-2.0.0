@@ -314,7 +314,7 @@ defmodule AppWeb.PageController do
   use AppWeb, :controller
 
   def home(conn, _params) do
-    render(conn, :home, message: "Hello, World!", injected_class: "text-2xl")
+    render(conn, :home, message: "Hello, World!", injected_class: "text-lg")
   end
 end
 ```
