@@ -115,7 +115,7 @@ spawn(fn ->
   IO.inspect(request, label: "Client Request")
 
   # send response
-  response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\n Hello world!"
+  response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\nHello world!"
   :gen_tcp.send(connection, response)
 
   # close connection
@@ -152,7 +152,7 @@ defmodule WebServer do
 
     # send response
     current_time = Time.to_string(Time.utc_now())
-    response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\n It is #{current_time}"
+    response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\nIt is #{current_time}"
     :gen_tcp.send(connection, response)
 
     # close connection
@@ -182,7 +182,7 @@ In the `WebServer` module above, modify the original response:
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\n It is #{current_time}"
+response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\nIt is #{current_time}"
 ```
 
 To a response using [Hyper Text Markup Language (HTML)](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics). HTML is the code used to structure a web page. For example, we can modify the response to use an HTML header tag `<h1>`.
@@ -190,7 +190,7 @@ To a response using [Hyper Text Markup Language (HTML)](https://developer.mozill
 <!-- livebook:{"force_markdown":true} -->
 
 ```elixir
-response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\n <h1>It is #{current_time}<h1/>"
+response = "HTTP/1.1 200\r\nContent-Type: text/html\r\n\r\n<h1>It is #{current_time}<h1/>"
 ```
 
 Visit http://localhost:4000 to see your modified content. You may need to stop the `WebServer` Elixir cell and start it again.
