@@ -96,14 +96,13 @@ We can spawn many tasks under the supervisor.
 
 ```elixir
 tasks =
-  Enum.map(1..5, fn int ->
-    task =
-      Task.Supervisor.async(MyTaskSupervisor, fn ->
-        IO.puts("Task Started")
-        Process.sleep(30000)
-        IO.puts("Task Finished")
-        int * 2
-      end)
+  Enum.map(1..System.schedulers_online(), fn int ->
+    Task.Supervisor.async(MyTaskSupervisor, fn ->
+      IO.puts("Task Started")
+      Process.sleep(30000)
+      IO.puts("Task Finished")
+      int * 2
+    end)
   end)
 ```
 
