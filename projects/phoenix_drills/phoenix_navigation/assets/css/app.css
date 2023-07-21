@@ -1,0 +1,13 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* This file is for your main application CSS */
+
+.nav {
+  padding: 1em;
+}
+
+.item {
+  padding: 0 0.5em;
+}
