@@ -86,7 +86,7 @@ To experiment with Tailwind, we can use the Tailwind CDN (Content Delivery Netwo
 
 We've also created a [Livebook Tailwind Playground](https://github.com/BrooklinJazz/kino_tailwind_playground) for the purposes of demonstration. All tailwind examples are editable and render live.
 
-<!-- livebook:{"attrs":{"html":"<div class=\"flex items-center justify-center h-screen w-full bg-green-200\">\n  <h1 class=\"text-3xl font-bold underline text-center\">\n    Go Ahead And Change This Text!\n  </h1>\n</div>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<div class=\"flex items-center justify-center h-screen w-full bg-green-200\">\n  <h1 class=\"text-5xl font-bold underline text-center\">\n    Go Ahead And Change This Text!\n  </h1>\n</div>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -144,7 +144,7 @@ Use the [Tailwind Documentation](https://tailwindcss.com/docs/installation) to c
 
 ![](images/tailwind_button_example.png)
 
-<!-- livebook:{"attrs":{"html":"<button class=\"\">Click Me!</button>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<button class=\"bg-orange-500 text-black p-3 rounded-full underline\">Click Me!</button>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -182,7 +182,7 @@ We have access to the following sizes: `xs`, `sm`, `base`, `lg`, `xl`, `2xl`, `3
 
 With Tailwind, `<p>`, `h1`, `h2`, `h3`, `h4`, `h5`, and `h6` are purely semantic and do not apply any styles by default.
 
-<!-- livebook:{"attrs":{"html":"<p>paragraph</p>\n<h1>h1</h1>\n<h2>h2</h2>\n<h3>h3</h3>\n<h4>h4</h4>\n<h5>h5</h5>\n<h6>h6</h6>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<p class=\"text-base\">paragraph</p>\n<h1>h1</h1>\n<h2>h2</h2>\n<h3>h3</h3>\n<h4>h4</h4>\n<h5>h5</h5>\n<h6>h6</h6>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -285,7 +285,7 @@ We can set the max/min or height/width using the `max-h-{size}`, `min-h-{size}`,
 
 Combining `w-fit`
 
-<!-- livebook:{"attrs":{"html":""},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<p class=\"w-fit mx-auto\">Fit</p>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -299,7 +299,7 @@ Create a paragraph tag that will wrap text on a new line when wider than 10rem.
 For example, this paragraph will wrap words when the text is wider than 10rem.<p>
 </p>
 
-<!-- livebook:{"attrs":{},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<p class=\"w-40\">For example, this paragraph will wrap words when the text is wider than 10rem.</p>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -324,7 +324,7 @@ Apply the `inline-block` on all of these span tags so that they can have height 
 
 Then change `inline-block` to `block` to see each span tag rendered on their own line.
 
-<!-- livebook:{"attrs":{"html":"<span class=\"h-6 w-6 bg-red-400\"></span>\n<span class=\"h-6 w-6 bg-orange-400\"></span>\n<span class=\"h-6 w-6 bg-yellow-400\"></span>\n<span class=\"h-6 w-6 bg-green-400\"></span>\n<span class=\"h-6 w-6 bg-blue-400\"></span>\n<span class=\"h-6 w-6 bg-purple-400\"></span>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<span class=\"block h-6 w-6 bg-red-400\"></span>\n<span class=\"block h-6 w-6 bg-orange-400\"></span>\n<span class=\"block h-6 w-6 bg-yellow-400\"></span>\n<span class=\"block h-6 w-6 bg-green-400\"></span>\n<span class=\"block h-6 w-6 bg-blue-400\"></span>\n<span class=\"block h-6 w-6 bg-purple-400\"></span>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -387,7 +387,7 @@ Create a series of rainbow boxes in the center of the page. Each box should be `
 
 </details>
 
-<!-- livebook:{"attrs":{"html":""},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<span class=\"block h-6 w-3/4 mt-8 mx-auto bg-red-400\"></span>\n<span class=\"block h-6 w-3/4 mt-8 mx-auto bg-orange-400\"></span>\n<span class=\"block h-6 w-3/4 mt-8 mx-auto bg-yellow-400\"></span>\n<span class=\"block h-6 w-3/4 mt-8 mx-auto bg-green-400\"></span>\n<span class=\"block h-6 w-3/4 mt-8 mx-auto bg-blue-400\"></span>\n<span class=\"block h-6 w-3/4 mt-8 mx-auto bg-purple-400\"></span>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -495,7 +495,7 @@ Create a rounded rainbow using `border` styles and `padding`.
 
 </details>
 
-<!-- livebook:{"attrs":{"html":""},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<span class=\"block p-2 m-2 border-8 rounded-full bg-red-400\">\n  <span class=\"block p-2 m-2 border-8 rounded-full bg-orange-400\">\n    <span class=\"block p-2 m-2 border-8 rounded-full bg-yellow-400\">\n      <span class=\"block p-2 m-2 border-8 rounded-full bg-green-400\">\n        <span class=\"block p-2 m-2 border-8 rounded-full bg-blue-400\">\n          <span class=\"block p-2 m-2 border-8 rounded-full bg-purple-400\"></span>\n        </span>\n      </span>\n    </span>\n  </span>\n</span>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -516,7 +516,7 @@ We can set the position value of an HTML element using `static` (default), `fixe
 <p class="sticky top-0">
 
 <!-- positions an element 3rem or 48px downwards of where it would normally be -->
-<p class="sticky bottom-12">
+<p class="relative bottom-12">
 ```
 
 <!-- livebook:{"break_markdown":true} -->
@@ -525,7 +525,7 @@ We can set the position value of an HTML element using `static` (default), `fixe
 
 Use `absolute` positioning to play a paragraph tag on the bottom-right corner of the display.
 
-<!-- livebook:{"attrs":{"html":""},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<p class=\"absolute bottom-0 right-0\">Here I am</p>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -555,7 +555,7 @@ See the [Hover, Focus, and Other States](https://tailwindcss.com/docs/hover-focu
 
 Make a button that changes styles on hover.
 
-<!-- livebook:{"attrs":{},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<button class=\"hover:bg-indigo-300 bg-indigo-500 p-2 rounded-lg\">hover button</button>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
@@ -576,7 +576,7 @@ Omitting the screen size applies the style on all screens (including those small
 
 Change the text size of a paragraph tag based on the screen size. Use the `xs`, `sm`, and `md` buttons in the playground to see the styles applied.
 
-<!-- livebook:{"attrs":{"html":"<p class=\"\">Dynamic Text Size</p>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
+<!-- livebook:{"attrs":{"html":"<p class=\"xs:text-xs sm:text-sm md:text-md lg:text-lg\">Dynamic Text Size</p>"},"chunks":null,"kind":"Elixir.Kino.TailwindPlayground","livebook_object":"smart_cell"} -->
 
 ```elixir
 Kino.nothing()
