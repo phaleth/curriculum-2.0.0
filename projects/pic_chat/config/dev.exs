@@ -2,9 +2,10 @@ import Config
 
 # Configure your database
 config :pic_chat, PicChat.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
+  username: System.get_env("POSTGRES_USERNAME") || "postgres",
+  password: System.get_env("POSTGRES_PASSWORD") || "postgres",
+  hostname: System.get_env("POSTGRES_HOSTNAME") || "localhost",
+  port: System.get_env("POSTGRES_PORT") || 5432,
   database: "pic_chat_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
