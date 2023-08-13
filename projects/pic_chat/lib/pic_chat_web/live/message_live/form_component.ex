@@ -20,6 +20,7 @@ defmodule PicChatWeb.MessageLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:content]} type="text" label="Content" />
+        <.input field={@form[:user_id]} type="hidden" value={@current_user.id} />
         <:actions>
           <.button phx-disable-with="Saving...">Save Message</.button>
         </:actions>
@@ -70,6 +71,7 @@ defmodule PicChatWeb.MessageLive.FormComponent do
   defp save_message(socket, :new, message_params) do
     case Messages.create_message(message_params) do
       {:ok, message} ->
+        message = Map.put(message, :user, socket.assigns.current_user)
         notify_parent({:new, message})
 
         {:noreply,

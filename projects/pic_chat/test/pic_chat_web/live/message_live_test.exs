@@ -3,14 +3,16 @@ defmodule PicChatWeb.MessageLiveTest do
 
   import Phoenix.LiveViewTest
   import PicChat.MessagesFixtures
+  import PicChat.AccountsFixtures
 
   @create_attrs %{content: "some content"}
   @update_attrs %{content: "some updated content"}
   @invalid_attrs %{content: nil}
 
   defp create_message(_) do
-    message = message_fixture()
-    %{message: message}
+    user = user_fixture()
+    message = message_fixture(user_id: user.id)
+    %{message: message, user: user}
   end
 
   describe "Index" do
@@ -23,53 +25,61 @@ defmodule PicChatWeb.MessageLiveTest do
       assert html =~ message.content
     end
 
-    test "saves new message", %{conn: conn} do
+    test "saves new message", %{conn: conn, user: user} do
+      conn = log_in_user(conn, user)
       {:ok, index_live, _html} = live(conn, ~p"/messages")
 
-      assert index_live |> element("a", "New Message") |> render_click() =~
-               "New Message"
+      {:ok, new_live, html} =
+        index_live |> element("a", "New Message") |> render_click() |> follow_redirect(conn)
 
-      assert_patch(index_live, ~p"/messages/new")
+      assert_redirected(index_live, ~p"/messages/new")
+      assert html =~ "New Message"
 
-      assert index_live
+      assert new_live
              |> form("#message-form", message: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      assert index_live
+      assert new_live
              |> form("#message-form", message: @create_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/messages")
+      assert_patch(new_live, ~p"/messages")
 
-      html = render(index_live)
+      html = render(new_live)
       assert html =~ "Message created successfully"
       assert html =~ "some content"
     end
 
-    test "updates message in listing", %{conn: conn, message: message} do
+    test "updates message in listing", %{conn: conn, message: message, user: user} do
+      conn = log_in_user(conn, user)
       {:ok, index_live, _html} = live(conn, ~p"/messages")
 
-      assert index_live |> element("#messages-#{message.id} a", "Edit") |> render_click() =~
-               "Edit Message"
+      {:ok, edit_live, html} =
+        index_live
+        |> element("#messages-#{message.id} a", "Edit")
+        |> render_click()
+        |> follow_redirect(conn)
 
-      assert_patch(index_live, ~p"/messages/#{message}/edit")
+      assert html =~ "Edit Message"
+      assert_redirect(index_live, ~p"/messages/#{message}/edit")
 
-      assert index_live
+      assert edit_live
              |> form("#message-form", message: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      assert index_live
+      assert edit_live
              |> form("#message-form", message: @update_attrs)
              |> render_submit()
 
-      assert_patch(index_live, ~p"/messages")
+      assert_patch(edit_live, ~p"/messages")
 
-      html = render(index_live)
+      html = render(edit_live)
       assert html =~ "Message updated successfully"
       assert html =~ "some updated content"
     end
 
-    test "deletes message in listing", %{conn: conn, message: message} do
+    test "deletes message in listing", %{conn: conn, message: message, user: user} do
+      conn = log_in_user(conn, user)
       {:ok, index_live, _html} = live(conn, ~p"/messages")
 
       assert index_live |> element("#messages-#{message.id} a", "Delete") |> render_click()
@@ -87,25 +97,27 @@ defmodule PicChatWeb.MessageLiveTest do
       assert html =~ message.content
     end
 
-    test "updates message within modal", %{conn: conn, message: message} do
+    test "updates message within modal", %{conn: conn, message: message, user: user} do
+      conn = log_in_user(conn, user)
       {:ok, show_live, _html} = live(conn, ~p"/messages/#{message}")
 
-      assert show_live |> element("a", "Edit") |> render_click() =~
-               "Edit Message"
+      {:ok, edit_live, html} =
+        show_live |> element("a", "Edit") |> render_click() |> follow_redirect(conn)
 
-      assert_patch(show_live, ~p"/messages/#{message}/show/edit")
+      assert html =~ "Edit Message"
+      assert_redirected(show_live, ~p"/messages/#{message}/show/edit")
 
-      assert show_live
+      assert edit_live
              |> form("#message-form", message: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      assert show_live
+      assert edit_live
              |> form("#message-form", message: @update_attrs)
              |> render_submit()
 
-      assert_patch(show_live, ~p"/messages/#{message}")
+      assert_patch(edit_live, ~p"/messages/#{message}")
 
-      html = render(show_live)
+      html = render(edit_live)
       assert html =~ "Message updated successfully"
       assert html =~ "some updated content"
     end

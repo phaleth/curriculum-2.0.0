@@ -1,7 +1,7 @@
 <.header>
   Listing Messages
   <:actions>
-    <.link patch={~p"/messages/new"}>
+    <.link :if={assigns[:current_user]} navigate={~p"/messages/new"}>
       <.button>New Message</.button>
     </.link>
   </:actions>
@@ -12,15 +12,25 @@
   rows={@streams.messages}
   row_click={fn {_id, message} -> JS.navigate(~p"/messages/#{message}") end}
 >
-  <:col :let={{_id, message}} label="Content"><%= message.content %></:col>
+  <:col :let={{_id, message}} label="Content">
+    <%= message.user.username %>: <%= message.content %>
+  </:col>
   <:action :let={{_id, message}}>
     <div class="sr-only">
-      <.link navigate={~p"/messages/#{message}"}>Show</.link>
+      <.link navigate={~p"/messages/#{message}"}>
+        Show
+      </.link>
     </div>
-    <.link patch={~p"/messages/#{message}/edit"}>Edit</.link>
+    <.link
+      :if={assigns[:current_user] && @current_user.id == message.user_id}
+      navigate={~p"/messages/#{message}/edit"}
+    >
+      Edit
+    </.link>
   </:action>
   <:action :let={{id, message}}>
     <.link
+      :if={assigns[:current_user] && @current_user.id == message.user_id}
       phx-click={JS.push("delete", value: %{id: message.id}) |> hide("##{id}")}
       data-confirm="Are you sure?"
     >
@@ -42,5 +52,6 @@
     action={@live_action}
     message={@message}
     patch={~p"/messages"}
+    current_user={@current_user}
   />
 </.modal>

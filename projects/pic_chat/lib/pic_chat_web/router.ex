@@ -18,15 +18,28 @@ defmodule PicChatWeb.Router do
   end
 
   scope "/", PicChatWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :protected_messages,
+      on_mount: [
+        {PicChatWeb.UserAuth, :ensure_authenticated},
+        {PicChatWeb.UserAuth, :require_user_owns_message}
+      ] do
+      live "/messages/new", MessageLive.Index, :new
+      live "/messages/:id/edit", MessageLive.Index, :edit
+      live "/messages/:id/show/edit", MessageLive.Show, :edit
+    end
+  end
+
+  scope "/", PicChatWeb do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/messages", MessageLive.Index, :index
-    live "/messages/new", MessageLive.Index, :new
-    live "/messages/:id/edit", MessageLive.Index, :edit
 
-    live "/messages/:id", MessageLive.Show, :show
-    live "/messages/:id/show/edit", MessageLive.Show, :edit
+    live_session :messages, on_mount: [{PicChatWeb.UserAuth, :mount_current_user}] do
+      live "/messages", MessageLive.Index, :index
+      live "/messages/:id", MessageLive.Show, :show
+    end
   end
 
   # Other scopes may use custom stacks.
