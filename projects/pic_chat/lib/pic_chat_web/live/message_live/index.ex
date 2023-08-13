@@ -33,8 +33,13 @@ defmodule PicChatWeb.MessageLive.Index do
   end
 
   @impl true
-  def handle_info({PicChatWeb.MessageLive.FormComponent, {:saved, message}}, socket) do
+  def handle_info({PicChatWeb.MessageLive.FormComponent, {:edit, message}}, socket) do
     {:noreply, stream_insert(socket, :messages, message)}
+  end
+
+  @impl true
+  def handle_info({PicChatWeb.MessageLive.FormComponent, {:new, message}}, socket) do
+    {:noreply, stream_insert(socket, :messages, message, at: 0)}
   end
 
   @impl true
