@@ -172,7 +172,8 @@ defmodule PicChatWeb.UserAuth do
     end
   end
 
-  def on_mount(:require_user_owns_message, %{"id" => message_id}, _session, socket) do
+  def on_mount(:require_user_owns_message, %{"id" => message_id}, session, socket) do
+    socket = mount_current_user(socket, session)
     message = PicChat.Messages.get_message!(message_id)
 
     if socket.assigns.current_user.id == message.user_id do

@@ -25,10 +25,12 @@ defmodule PicChat.MessagesTest do
 
     test "create_message/1 with valid data creates a message" do
       user = user_fixture()
-      valid_attrs = %{content: "some content", user_id: user.id}
+      valid_attrs = %{content: "some content", user_id: user.id, picture: "images/picture.png"}
 
       assert {:ok, %Message{} = message} = Messages.create_message(valid_attrs)
       assert message.content == "some content"
+      assert message.user_id == user.id
+      assert message.picture == "images/picture.png"
     end
 
     test "create_message/1 with invalid data returns error changeset" do
